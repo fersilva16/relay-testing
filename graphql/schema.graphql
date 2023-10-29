@@ -1,0 +1,59 @@
+type Query {
+  todos(after: String, first: Int, before: String, last: Int): TodoConnection!
+}
+
+interface Node {
+  id: ID!
+}
+
+type Todo implements Node {
+  id: ID!
+  message: String!
+  checked: Boolean!
+}
+
+type PageInfoExtended {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type TodoConnection {
+  count: Int
+  totalCount: Int
+  startCursorOffset: Int!
+  endCursorOffset: Int!
+  pageInfo: PageInfoExtended!
+  edges: [TodoEdge]!
+}
+
+type TodoEdge {
+  node: Todo
+  cursor: String!
+}
+
+type Mutation {
+  TodoAdd(input: TodoAddInput!): TodoAddPayload
+  TodoEdit(input: TodoEditInput!): TodoEditPayload
+}
+
+type TodoAddPayload {
+  todo: Todo
+  clientMutationId: String
+}
+
+input TodoAddInput {
+  message: String!
+  clientMutationId: String
+}
+
+type TodoEditPayload {
+  todo: Todo
+  clientMutationId: String
+}
+
+input TodoEditInput {
+  checked: Boolean
+  clientMutationId: String
+}
